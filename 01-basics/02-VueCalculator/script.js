@@ -11,15 +11,15 @@ const app = createApp({
   computed: {
     calcResult() {
       if (this.checkedOperator == 'sum') {
-        return parseFloat(this.numA) + parseFloat(this.numB)
+        return this.numA + this.numB
       } else if (this.checkedOperator == 'subtract') {
-        return parseFloat(this.numA) - parseFloat(this.numB)
+        return this.numA - this.numB
 
       } else if (this.checkedOperator == 'multiply') {
-        return parseFloat(this.numA) * parseFloat(this.numB)
+        return this.numA * this.numB
 
       } else if (this.checkedOperator == 'divide') {
-        return parseFloat(this.numA) / parseFloat(this.numB)
+        return this.numA / this.numB
       }
     }
   }
