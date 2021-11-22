@@ -35,19 +35,19 @@ const app = createApp({
       emails,
       search: '',
       isMarked: false,
-    }
+    };
   },
   computed: {
     filteredEmails() {
       let searchValue = this.search.toLowerCase();
 
-      let filteredEmailsList = this.emails.map(function(email) {
-        return {address: email, isMarked: email.toLowerCase().includes(searchValue) && searchValue != ''}
+      let filteredEmailsList = this.emails.map(function (email) {
+        return { address: email, isMarked: email.toLowerCase().includes(searchValue) && searchValue != '' };
       });
 
       return filteredEmailsList;
-    }
-  }
+    },
+  },
 });
 
-app.mount("#app");
+app.mount('#app');
