@@ -23,11 +23,16 @@ const app = createApp({
   },
   watch: {
     meetupId() {
-      fetchMeetupById(this.meetupId).then((meetup) => (this.meetupTitle = meetup.title));
+      this.fetchMeetup();
     },
   },
+  methods: {
+    fetchMeetup() {
+      fetchMeetupById(this.meetupId).then((meetup) => (this.meetupTitle = meetup.title));
+    }
+  },
   mounted() {
-    fetchMeetupById(this.meetupId).then((meetup) => (this.meetupTitle = meetup.title));
+    this.fetchMeetup();
   },
 });
 app.mount('#app');
