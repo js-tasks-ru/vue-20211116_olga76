@@ -26,13 +26,13 @@ const app = createApp({
       this.fetchMeetup();
     },
   },
+  mounted() {
+    this.fetchMeetup();
+  },
   methods: {
     fetchMeetup() {
       fetchMeetupById(this.meetupId).then((meetup) => (this.meetupTitle = meetup.title));
-    }
-  },
-  mounted() {
-    this.fetchMeetup();
+    },
   },
 });
 app.mount('#app');
