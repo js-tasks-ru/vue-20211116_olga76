@@ -1,5 +1,5 @@
 <template>
-  <div :class="`toast_${toast.type}`" class="toast">
+  <div :class="toastClass" class="toast">
     <ui-icon :icon="toastIcon" class="toast__icon" />
     <span>{{ toast.text }}</span>
   </div>
@@ -8,7 +8,16 @@
 <script>
 import UiIcon from './UiIcon';
 
-const icons = { success: 'check-circle', error: 'alert-circle' };
+const toastType = {
+  success: {
+    toastIcon: 'check-circle',
+    toastClass: 'toast_success',
+  },
+  error: {
+    toastIcon: 'alert-circle',
+    toastClass: 'toast_error',
+  },
+};
 
 export default {
   name: 'UiToast',
@@ -23,7 +32,10 @@ export default {
 
   computed: {
     toastIcon() {
-      return icons[this.toast.type];
+      return toastType[this.toast.type].toastIcon;
+    },
+    toastClass() {
+      return toastType[this.toast.type].toastClass;
     },
   },
 };
