@@ -1,7 +1,7 @@
 <template>
   <div class="page-auth">
     <ui-container>
-      <h2 class="title page-auth__title">Вход</h2>
+      <h2 class="title page-auth__title">Вход {{ handleSubmit }}</h2>
       <form class="form" @submit.prevent="handleSubmit">
         <ui-form-group label="Email">
           <div class="input-group">
@@ -16,7 +16,9 @@
         <div class="form__buttons">
           <button type="submit" class="button button_primary button_block">Войти</button>
         </div>
-        <div class="form__append">Нет аккаунта? <a href="/register" class="link">Зарегистрируйтесь</a></div>
+        <div class="form__append">
+          Нет аккаунта? <router-link :to="{ name: 'register' }" class="link">Зарегистрируйтесь</router-link>
+        </div>
       </form>
     </ui-container>
   </div>
@@ -36,7 +38,7 @@ export default {
 
   methods: {
     handleSubmit() {
-      // Требуется обработать сабмит формы
+      this.$router.push({ path: this.$route.query.from ? this.$route.query.from : '/' });
     },
   },
 };

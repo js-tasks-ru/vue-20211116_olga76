@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       toastList: [],
+      lastId: 0,
     };
   },
 
@@ -29,15 +30,16 @@ export default {
     },
 
     addElem(toastType, toastText) {
-      let toastDate = Date.now();
-      let toast = { type: toastType, text: toastText, date: toastDate };
+      let toastId = this.lastId;
+      let toast = { type: toastType, text: toastText, id: toastId };
       this.toastList.push(toast);
-      this.removeElem(toastDate);
+      this.lastId++;
+      this.removeElem(toastId);
     },
 
-    removeElem(toastDate) {
+    removeElem(toastId) {
       setTimeout(() => {
-        const index = this.toastList.findIndex((toast) => toast.date === toastDate);
+        const index = this.toastList.findIndex((toast) => toast.id === toastId);
         this.toastList.splice(index, 1);
       }, 5000);
     },

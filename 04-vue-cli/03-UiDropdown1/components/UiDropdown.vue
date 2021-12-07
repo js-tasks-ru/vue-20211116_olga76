@@ -61,13 +61,16 @@ export default {
 
   computed: {
     dropdownHasIcon() {
-      return this.options.find((option) => option.icon);
+      return this.options.some((option) => option.icon);
+    },
+    selectedItem() {
+      return this.options.find((option) => option.value === this.modelValue);
     },
     selectedItemIcon() {
-      return this.modelValue ? this.options.find((option) => option.value === this.modelValue).icon : '';
+      return this.selectedItem ? this.selectedItem.icon : '';
     },
     selectedItemText() {
-      return this.modelValue ? this.options.find((option) => option.value === this.modelValue).text : this.title;
+      return this.selectedItem ? this.selectedItem.text : this.title;
     },
   },
 
