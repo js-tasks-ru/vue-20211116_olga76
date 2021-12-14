@@ -1,15 +1,100 @@
 <template>
   <div class="image-uploader">
-    <label class="image-uploader__preview image-uploader__preview-loading" style="--bg-url: url('/link.jpeg')">
-      <span class="image-uploader__text">Загрузить изображение</span>
-      <input type="file" accept="image/*" class="image-uploader__input" />
+    <label
+      class="image-uploader__preview"
+      :class="{ 'image-uploader__preview-loading': currentState.type === 'loading' }"
+      :style="bgImage"
+    >
+      <span class="image-uploader__text">{{ currentState.text }}</span>
+      <input
+        ref="input"
+        v-bind="$attrs"
+        type="file"
+        accept="image/*"
+        class="image-uploader__input"
+        @[inputEvent].prevent="inputEventHandler"
+      />
     </label>
   </div>
 </template>
 
 <script>
+const state = {
+  empty: {
+    type: 'empty',
+    text: 'Загрузить изображение',
+  },
+  loading: {
+    type: 'loading',
+    text: 'Загрузка...',
+  },
+  preview: {
+    type: 'preview',
+    text: 'Удалить изображение',
+  },
+};
+
 export default {
   name: 'UiImageUploader',
+  inheritAttrs: false,
+
+  props: {
+    preview: {
+      type: String,
+    },
+    uploader: {
+      type: Function,
+    },
+  },
+
+  emits: ['select', 'remove', 'upload', 'error'],
+
+  data() {
+    return {
+      status: this.preview ? 'preview' : 'empty',
+    };
+  },
+
+  computed: {
+    bgImage() {
+      return this.preview ? `--bg-url: url('${this.preview}')` : undefined;
+    },
+    currentState() {
+      return state[this.status];
+    },
+    inputEvent() {
+      return this.status === 'preview' ? 'click' : 'change';
+    },
+  },
+
+  methods: {
+    inputEventHandler() {
+      if (this.status === 'loading') {
+        return;
+      } else if (this.status === 'preview') {
+        this.$emit('remove');
+        this.status = 'empty';
+        this.$refs.input.value = null;
+      } else {
+        this.$emit('select', this.$refs['input'].files[0]);
+        if (this.uploader) {
+          this.status = 'loading';
+          this.uploader(this.$refs['input'].files[0])
+            .then((res) => {
+              this.$emit('upload', res);
+              this.status = 'preview';
+            })
+            .catch((err) => {
+              this.$emit('error', err);
+              this.status = this.preview ? 'preview' : 'empty';
+              this.$refs.input.value = null;
+            });
+        } else {
+          this.status = 'preview';
+        }
+      }
+    },
+  },
 };
 </script>
 

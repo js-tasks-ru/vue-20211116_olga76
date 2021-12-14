@@ -1,7 +1,7 @@
 <template>
   <div class="page-auth">
     <ui-container>
-      <h2 class="title page-auth__title">Вход {{ handleSubmit }}</h2>
+      <h2 class="title page-auth__title">Вход</h2>
       <form class="form" @submit.prevent="handleSubmit">
         <ui-form-group label="Email">
           <div class="input-group">
