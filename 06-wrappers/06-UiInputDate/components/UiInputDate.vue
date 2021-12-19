@@ -1,5 +1,5 @@
 <template>
-  <ui-input ref="uiInput" v-model="customModel" :type="type">
+  <ui-input :model-value="value" :type="type" @input="handleInput">
     <template v-for="slot in Object.keys($slots)" #[slot]>
       <slot :name="slot" />
     </template>
@@ -27,33 +27,38 @@ export default {
   emits: ['update:modelValue'],
 
   computed: {
-    customModel: {
-      get() {
-        if (!this.modelValue) {
-          return null;
-        }
+    value() {
+      if (!this.modelValue) {
+        return '';
+      }
 
-        let year = new Date(this.modelValue).toISOString().split(/T|\./)[0];
-        let time = new Date(this.modelValue).toISOString().split(/T|\./)[1];
+      const date = new Date(this.modelValue).toISOString();
+      let year = date.split(/T|\./)[0];
+      let time = date.split(/T|\./)[1];
 
-        if (this.type === 'date') {
-          return year;
-        } else if (this.type === 'time') {
-          if (this.$attrs.step && this.$attrs.step % 60 !== 0) {
-            return time;
-          } else {
-            return time.substr(0, 5);
-          }
-        } else if (this.type === 'datetime-local') {
-          return `${year}T${time}`;
+      if (this.type === 'date') {
+        return year;
+      } else if (this.type === 'time') {
+        if (this.$attrs.step && this.$attrs.step % 60 !== 0) {
+          return time;
         } else {
-          return this.modelValue;
+          return time.substr(0, 5);
         }
-      },
+      } else if (this.type === 'datetime-local') {
+        return `${year}T${time}`;
+      } else {
+        return '';
+      }
+    },
+  },
+  methods: {
+    handleInput($event) {
+      if ($event.target.value === '') {
+        this.$emit('update:modelValue', null);
+        return;
+      }
 
-      set() {
-        this.$emit('update:modelValue', this.$refs.uiInput.$refs.input.valueAsNumber);
-      },
+      this.$emit('update:modelValue', $event.target.valueAsNumber);
     },
   },
 };
